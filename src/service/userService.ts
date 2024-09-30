@@ -22,8 +22,10 @@ export const register = async ({ full_name, email, password }: { full_name: stri
         full_name,
         user_name,
         email,
-        password: hashedPassword    });
+        password: hashedPassword  ,
+        is_active: 1
 
+    });
     // Lưu user vào cơ sở dữ liệu
     await AppDataSource.getRepository(User).save(newUser);
 

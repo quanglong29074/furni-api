@@ -15,7 +15,7 @@ await AppDataSource.initialize()
       console.error('Error during Data Source initialization:', err);
     });
 
-    
+
 const app = new Elysia()
   .use(swagger({
     path: '/swagger-ui',
@@ -49,7 +49,8 @@ const app = new Elysia()
   //add more plugins here
 )
 .listen(3000);
-
+ app.use(cors({
+  }));
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
