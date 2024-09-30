@@ -6,10 +6,22 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
-    "elysia": "^1.1.17",
-    "mysql2": "^3.11.3"
+    "@elysiajs/cors": "^1.0.5",
+    "@elysiajs/swagger": "^1.0.5",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "elysia": "^1.0.27",
+    "jsonwebtoken": "^9.0.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.11.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^22.7.4",
     "bun-types": "latest"
   },
   "module": "src/index.js"
