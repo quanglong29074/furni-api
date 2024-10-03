@@ -7,6 +7,7 @@ import { Size } from './entity/size';
 import { Product } from './entity/product';
 import { User } from './entity/user';
 import { Role } from './entity/role';
+import { Cart } from './entity/cart';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -15,5 +16,5 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: '', // Thay đổi nếu cần
   database: 'furni_shop', // Tên cơ sở dữ liệu của bạn
-  entities: [Category, User,Role, Brand, Material, Size, Product], // Bao gồm tất cả các entity
+  entities: [Category, User,Role, Brand, Material, Size, Product,Cart], // Bao gồm tất cả các entity
 });

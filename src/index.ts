@@ -5,6 +5,8 @@ import mysql from 'mysql2/promise'
 import { AppDataSource } from './data-source'; // Import AppDataSource
 import categoryPlugin from './plugin/categoryPlugin';
 import userPlugin from './plugin/userPlugin';
+import productPlugin from './plugin/productPlugin';
+import cartPlugin from './plugin/cartPlugin';
 
 // Tạo kết nối tới MySQL trên XAMPP
 await AppDataSource.initialize()
@@ -43,8 +45,10 @@ const app = new Elysia()
   }))
   .group("/api", (group) =>
     group
-      .use(categoryPlugin)
       .use(userPlugin)
+      .use(categoryPlugin)
+      .use(productPlugin)
+      .use(cartPlugin)
 
   //add more plugins here
 )

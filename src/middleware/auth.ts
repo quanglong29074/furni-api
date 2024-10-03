@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export const isAuthenticated  = (token: string | undefined) => {
     interface JwtPayloadWithId extends JwtPayload {
-        id: string;
+        id: number;
       }
   if (!token) {
     throw error(403, 'Unauthorized');
