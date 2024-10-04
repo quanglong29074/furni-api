@@ -1,16 +1,21 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Product } from './product';
 
 @Entity('category')
 export class Category {
-  @PrimaryGeneratedColumn()
-  id!: number; // Có thể không được khởi tạo ngay lập tức
+    @PrimaryGeneratedColumn()
+    id!: number;
 
-  @Column({ type: 'varchar', length: 150 })
-  category_name!: string; // Chắc chắn sẽ được khởi tạo, dùng dấu '!' để tránh lỗi
+    @Column({ type: 'varchar', length: 150 })
+    category_name!: string;
 
-  @Column({ type: 'longtext' }) // Thay đổi kiểu dữ liệu từ varchar sang longtext
-  image!: string; // Chắc chắn sẽ được khởi tạo, dùng dấu '!' để tránh lỗi
+    @Column({ type: 'longtext' })
+    image!: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  slug!: string; // Có thể nullable
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    slug!: string;
+
+    // Mối quan hệ với sản phẩm
+    @OneToMany(() => Product, product => product.category)
+    products!: Product[]; // Thêm mối quan hệ với Product
 }
