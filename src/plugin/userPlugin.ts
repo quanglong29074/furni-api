@@ -1,6 +1,7 @@
 import { Elysia, t } from 'elysia';
 import jwt from 'jsonwebtoken';
 import * as userService from '../service/userService';
+import { isAuthenticated } from '../middleware/auth'; // Import hàm xác thực
 
 const userPlugin = new Elysia()
   .group("/user", (group) =>
@@ -30,15 +31,22 @@ const userPlugin = new Elysia()
       })
       .post("/change-password", async ({ body, headers }) => {
         // Lấy token từ headers
-        const token = headers.authorization?.split(' ')[1]; // Giả sử token được gửi trong header Authorization
+        const token = headers.authorization;
 
+        // Kiểm tra sự tồn tại của token
         if (!token) {
           throw new Error("Token is missing");
         }
 
+        // Xác thực token
+        const loggedUser = isAuthenticated(token);
+        if (!loggedUser) {
+          throw new Error('Authentication failed');
+        }
+
         try {
           // Giải mã token để lấy userId
-          const decoded: any = jwt.verify(token, 'your_jwt_secret'); // Thay 'your_jwt_secret' bằng secret của bạn
+          const decoded: any = jwt.verify(token.split(' ')[1], 'your_jwt_secret'); // Thay 'your_jwt_secret' bằng secret của bạn
           const userId = decoded.id;
 
           return await userService.changePassword({
@@ -53,6 +61,9 @@ const userPlugin = new Elysia()
       }, {
         detail: {
           tags: ['User'],
+          security: [
+            { JwtAuth: [] } // Thêm security
+          ],
         },
         body: t.Object({
           oldPassword: t.String(),
