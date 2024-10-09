@@ -68,3 +68,30 @@ export const login = async ({ email, password }: { email: string, password: stri
 
   return { token };
 };
+export const changePassword = async ({ userId, oldPassword, newPassword, confirmNewPassword }: { userId: number, oldPassword: string, newPassword: string, confirmNewPassword: string }) => {
+  // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
+  if (newPassword !== confirmNewPassword) {
+      throw new Error("New password and confirm password do not match");
+  }
+
+  // Tìm người dùng bằng userId
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id: userId } });
+  if (!user) {
+      throw new Error("User not found");
+  }
+
+  // Kiểm tra mật khẩu cũ
+  const isOldPasswordValid = await bcrypt.compare(oldPassword, user.password);
+  if (!isOldPasswordValid) {
+      throw new Error("Old password is incorrect");
+  }
+
+  // Băm mật khẩu mới
+  const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+  // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+  user.password = hashedNewPassword;
+  await AppDataSource.getRepository(User).save(user);
+
+  return { message: "Password changed successfully" }; // Trả về thông báo thành công
+};
