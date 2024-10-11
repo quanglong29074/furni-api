@@ -33,28 +33,20 @@ const userPlugin = new Elysia()
         // Lấy token từ headers
         const token = headers.authorization;
 
-        // Kiểm tra sự tồn tại của token
-        if (!token) {
-          throw new Error("Token is missing");
-        }
-
         // Xác thực token
         const loggedUser = isAuthenticated(token);
         if (!loggedUser) {
           throw new Error('Authentication failed');
         }
-
+    
+const {oldPassword, newPassword, confirmNewPassword} = body
         try {
-          // Giải mã token để lấy userId
-          const decoded: any = jwt.verify(token.split(' ')[1], 'your_jwt_secret'); // Thay 'your_jwt_secret' bằng secret của bạn
-          const userId = decoded.id;
 
-          return await userService.changePassword({
-            userId,
-            oldPassword: body.oldPassword,
-            newPassword: body.newPassword,
-            confirmNewPassword: body.confirmNewPassword
-          });
+          const user = await userService.changePassword(
+             oldPassword,newPassword,confirmNewPassword, loggedUser.id,
+          );
+          return  user;
+
         } catch (error) {
           throw new Error("Invalid token");
         }

@@ -68,7 +68,7 @@ export const login = async ({ email, password }: { email: string, password: stri
 
   return { token };
 };
-export const changePassword = async ({ userId, oldPassword, newPassword, confirmNewPassword }: { userId: number, oldPassword: string, newPassword: string, confirmNewPassword: string }) => {
+export const changePassword = async ( oldPassword:string, newPassword:string, confirmNewPassword: string, userId: number ) => {
   // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
   if (newPassword !== confirmNewPassword) {
       throw new Error("New password and confirm password do not match");
@@ -85,7 +85,7 @@ export const changePassword = async ({ userId, oldPassword, newPassword, confirm
   if (!isOldPasswordValid) {
       throw new Error("Old password is incorrect");
   }
-
+  
   // Băm mật khẩu mới
   const hashedNewPassword = await bcrypt.hash(newPassword, 10);
 
