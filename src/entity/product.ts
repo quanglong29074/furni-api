@@ -1,9 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn,OneToMany } from 'typeorm';
 import { Category } from './category';
 import { Brand } from './brand';
 import { Material } from './material';
 import { Size } from './size';
-
 @Entity('product')
 export class Product {
   @PrimaryGeneratedColumn()
@@ -51,4 +50,5 @@ export class Product {
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   length!: number;
+
 }

@@ -19,6 +19,27 @@ export const getAllProduct = async () => {
 
     return products;
 }
+export const getProductsByCategoryId = async (categoryId: number) => {
+  const products = await AppDataSource.getRepository(Product)
+    .createQueryBuilder("product")
+    .leftJoinAndSelect("product.category", "category")
+    .leftJoinAndSelect("product.brand", "brand")
+    .leftJoinAndSelect("product.material", "material")
+    .leftJoinAndSelect("product.size", "size")
+    .where("category.id = :categoryId", { categoryId })
+    .select([
+      "product",
+      "category.category_name",
+      "brand.brand_name",
+      "material.material_name",
+      "size.size_name"
+    ])
+    .getMany();
+
+  return products.length > 0 ? products : [];  // Trả về một danh sách rỗng nếu không có sản phẩm
+}
+
+
 
 export const getProductById = async (id: number) => { // Chuyển slug thành id
   const product = await AppDataSource.getRepository(Product)

@@ -1,5 +1,5 @@
 // data-source.ts
-import { DataSource } from 'typeorm';
+import { DataSource } from 'typeorm'; 
 import { Category } from './entity/category';
 import { Brand } from './entity/brand';
 import { Material } from './entity/material';
@@ -14,7 +14,7 @@ export const AppDataSource = new DataSource({
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: '', // Thay đổi nếu cần
+  password: 'root', // Thay đổi nếu cần
   database: 'furni_shop', // Tên cơ sở dữ liệu của bạn
   entities: [Category, User,Role, Brand, Material, Size, Product,Cart], // Bao gồm tất cả các entity
 });

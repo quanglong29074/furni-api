@@ -3,7 +3,7 @@ import * as categoryService from '../service/categoryService';
 
 
 const categoryPlugin = new Elysia()
-  .group("/catgory", (group) =>
+  .group("/category", (group) =>
     group
   .get("/", async ({  }) => {
     return await categoryService.getAllCategory();

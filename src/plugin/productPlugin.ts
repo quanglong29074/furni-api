@@ -11,6 +11,19 @@ const productPlugin = new Elysia()
           tags: ['Product'],
         }
       })
+      .get("/category/:id", async ({ params }: { params: { id: string } }) => {
+        const categoryId = parseInt(params.id);
+        const products = await productService.getProductsByCategoryId(categoryId);
+        return {
+            status: 200,
+            data: products
+        };
+    }, {
+        detail: {
+            tags: ['Product'],
+        }
+    })
+    
       .get("/productDetail/:id", async ({ params }: { params: { id: string } }) => {
         const productId = parseInt(params.id); 
         const product = await productService.getProductById(productId);
