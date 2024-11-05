@@ -36,6 +36,18 @@ const productPlugin = new Elysia()
             tags: ['Product'],
         }
     })    
+    .get("/related/:id", async ({ params }: { params: { id: string } }) => {
+      const productId = parseInt(params.id);
+      const relatedProducts = await productService.getRelatedProducts(productId);
+      return {
+        status: 200,
+        data: relatedProducts
+      };
+    }, {
+      detail: {
+        tags: ['Product'],
+      }
+    })
   );
 
 export default productPlugin;
