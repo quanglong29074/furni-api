@@ -20,4 +20,5 @@ export class Cart {
 
   @Column({ type: 'double' })
   total!: number;  // Tổng giá trị cho sản phẩm trong giỏ hàng
+  
 }

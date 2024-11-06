@@ -44,3 +44,54 @@ export const addToCart = async ({ user_id, product_id, qty }: { user_id: number,
         return newCartItem;
     }
 };
+export const updateCart = async ({ user_id, product_id, qty }: { user_id: number, product_id: number, qty: number }) => {
+    const cartRepository = AppDataSource.getRepository(Cart);
+    const productRepository = AppDataSource.getRepository(Product);
+
+    // Kiểm tra xem sản phẩm có tồn tại không
+    const product = await productRepository.findOne({ where: { id: product_id } });
+    if (!product) {
+        throw new Error('Product not found');
+    }
+
+    // Tìm mục giỏ hàng hiện tại
+    const cartItem = await cartRepository.findOne({ where: { user: { id: user_id }, product: { id: product_id } } });
+    if (!cartItem) {
+        throw new Error('Cart item not found');
+    }
+
+    // Cập nhật số lượng và tổng tiền
+    cartItem.qty = qty;
+    cartItem.total = qty * product.price;
+    await cartRepository.save(cartItem);
+    return cartItem;
+};
+export const removeFromCart = async ({ user_id, product_id }: { user_id: number, product_id: number }) => {
+    const cartRepository = AppDataSource.getRepository(Cart);
+
+    // Tìm mục giỏ hàng hiện tại
+    const cartItem = await cartRepository.findOne({ where: { user: { id: user_id }, product: { id: product_id } } });
+    if (!cartItem) {
+        throw new Error('Cart item not found');
+    }
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    await cartRepository.remove(cartItem);
+};
+export const getCartByUserId = async (user_id: number) => {
+    const cartRepository = AppDataSource.getRepository(Cart);
+  
+    // Lấy giỏ hàng của người dùng, bao gồm thông tin sản phẩm và danh mục sản phẩm
+    const cartItems = await cartRepository.find({
+      where: { user: { id: user_id } },
+      relations: ['product', 'product.category'], // Kết nối với bảng Product và Category
+    });
+  
+    // Tính tổng tiền cho mỗi mục trong giỏ hàng
+    const cartWithTotal = cartItems.map(item => ({
+      ...item,
+      total: item.qty * item.product.price,
+    }));
+  
+    return cartWithTotal;
+  };
