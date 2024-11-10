@@ -48,6 +48,43 @@ const productPlugin = new Elysia()
         tags: ['Product'],
       }
     })
+    .patch("/updateQty/:productId", async ({ params, body }: { params: { productId: string }; body: { qty: number } }) => {
+      const productId = parseInt(params.productId);
+      const { qty } = body;
+
+      if (!productId || qty === undefined) {
+        return {
+          status: 400,
+          message: "Product ID and qty are required",
+        };
+      }
+
+      try {
+        // Lấy số lượng sản phẩm hiện tại từ cơ sở dữ liệu
+        const product = await productService.getProductById(productId);
+        
+        if (product.qty < qty) {
+          return {
+            status: 400,
+            message: "Not enough stock",
+          };
+        }
+
+        // Trừ đi số lượng sản phẩm từ giỏ hàng
+        await productService.updateProductQty(productId, product.qty - qty);
+
+        return {
+          status: 200,
+          message: "Product quantity updated successfully",
+        };
+      } catch (error) {
+        const errorMessage = (error as Error).message;
+        return {
+          status: 500,
+          message: `Error updating product quantity: ${errorMessage}`,
+        };
+      }
+    })
   );
 
 export default productPlugin;

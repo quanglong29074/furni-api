@@ -64,7 +64,21 @@ export const getProductById = async (id: number) => { // Chuyển slug thành id
 
   return product;
 }
+export const updateProductQty = async (productId: number, qty: number) => {
+  const productRepository = AppDataSource.getRepository(Product);
 
+  const product = await productRepository.findOneBy({ id: productId });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  // Cập nhật số lượng sản phẩm
+  product.qty = qty;
+
+  // Lưu lại thay đổi vào cơ sở dữ liệu
+  await productRepository.save(product);
+};
 export const getRelatedProducts = async (productId: number) => {
   // Lấy sản phẩm hiện tại để tìm danh mục
   const product = await AppDataSource.getRepository(Product)

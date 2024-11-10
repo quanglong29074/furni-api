@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Order } from './order';
 @Entity('user')
 export class User {
   @PrimaryGeneratedColumn()
-  id!: number;  // Sử dụng ! để bỏ qua cảnh báo về trình khởi tạo
+  id!: number;  
 
   @Column({ type: 'varchar', length: 50 })
   user_name!: string;
@@ -27,4 +28,5 @@ export class User {
 
   @Column({ type: 'tinyint', width: 4, default: 1 })
   is_active!: number;
+
 }

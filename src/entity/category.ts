@@ -15,7 +15,4 @@ export class Category {
     @Column({ type: 'varchar', length: 255, nullable: true })
     slug!: string;
 
-    // Mối quan hệ với sản phẩm
-    @OneToMany(() => Product, product => product.category)
-    products!: Product[]; // Thêm mối quan hệ với Product
 }

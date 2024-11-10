@@ -2,12 +2,13 @@ import { Elysia, error, t } from 'elysia';
 import { swagger } from '@elysiajs/swagger';
 import { cors } from '@elysiajs/cors'
 import mysql from 'mysql2/promise'
+import "reflect-metadata";
 import { AppDataSource } from './data-source'; // Import AppDataSource
 import categoryPlugin from './plugin/categoryPlugin';
 import userPlugin from './plugin/userPlugin';
 import productPlugin from './plugin/productPlugin';
 import cartPlugin from './plugin/cartPlugin';
-
+import orderPlugin from './plugin/orderPlugin';
 // Tạo kết nối tới MySQL trên XAMPP
 await AppDataSource.initialize()
     .then(() => {
@@ -49,6 +50,7 @@ const app = new Elysia()
       .use(categoryPlugin)
       .use(productPlugin)
       .use(cartPlugin)
+      .use(orderPlugin)
 
   //add more plugins here
 )

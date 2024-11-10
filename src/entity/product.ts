@@ -3,6 +3,7 @@ import { Category } from './category';
 import { Brand } from './brand';
 import { Material } from './material';
 import { Size } from './size';
+import { OrderProduct } from './order_product';
 @Entity('product')
 export class Product {
   @PrimaryGeneratedColumn()
@@ -23,6 +24,9 @@ export class Product {
   @Column({ type: 'int', nullable: true })
   qty!: number;
 
+  @Column({ type: 'text', nullable: true })
+  description!: string;
+  
   @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
   category!: Category;
@@ -49,6 +53,5 @@ export class Product {
   height!: number;
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
-  length!: number;
-
+  length!: number; 
 }
