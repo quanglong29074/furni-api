@@ -84,7 +84,10 @@ const productPlugin = new Elysia()
           message: `Error updating product quantity: ${errorMessage}`,
         };
       }
+    }, {
+      detail: {
+        tags: ['Order'], 
+      }
     })
   );
-
 export default productPlugin;
