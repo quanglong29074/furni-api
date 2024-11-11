@@ -111,3 +111,22 @@ export const getRelatedProducts = async (productId: number) => {
 
   return relatedProducts.length > 0 ? relatedProducts : []; // Trả về danh sách rỗng nếu không có sản phẩm liên quan
 }
+export const searchProductsByName = async (name: string) => {
+  const products = await AppDataSource.getRepository(Product)
+    .createQueryBuilder("product")
+    .leftJoinAndSelect("product.category", "category")
+    .leftJoinAndSelect("product.brand", "brand")
+    .leftJoinAndSelect("product.material", "material")
+    .leftJoinAndSelect("product.size", "size")
+    .select([
+      "product",
+      "category.category_name",
+      "brand.brand_name",
+      "material.material_name",
+      "size.size_name",
+    ])
+    .where("product.product_name LIKE :name", { name: `%${name}%` })
+    .getMany();
+
+  return products;
+};
