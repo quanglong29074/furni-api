@@ -9,6 +9,7 @@ import { Role } from './entity/role';
 import { Cart } from './entity/cart';
 import { Order } from './entity/order';
 import { OrderProduct } from './entity/order_product';
+import { Favorite } from './entity/favorite';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -17,5 +18,5 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: 'root', 
   database: 'furni_shop', 
-  entities: [User, Role, Brand, Material, Size, Category, Product, Cart, Order, OrderProduct], 
+  entities: [User, Role, Brand, Material, Size, Category, Product, Cart, Order, OrderProduct,Favorite], 
 });

@@ -24,7 +24,10 @@ const cartPlugin = new Elysia().group("/cart", (group) =>
         };
       },
       {
-        detail: { tags: ["Cart"] },
+        detail: { 
+          tags: ["Cart"] ,
+          security: [{ JwtAuth: [] }],
+        },
         body: t.Object({
           product_id: t.Number(),
           qty: t.Number(),
@@ -51,7 +54,10 @@ const cartPlugin = new Elysia().group("/cart", (group) =>
         };
       },
       {
-        detail: { tags: ["Cart"] },
+        detail: { 
+          tags: ["Cart"] ,
+          security: [{ JwtAuth: [] }],
+        },
         body: t.Object({
           product_id: t.Number(),
           qty: t.Number(),
@@ -77,7 +83,10 @@ const cartPlugin = new Elysia().group("/cart", (group) =>
         };
       },
       {
-        detail: { tags: ["Cart"] },
+        detail: { 
+          tags: ["Cart"] ,
+          security: [{ JwtAuth: [] }],
+        },
         body: t.Object({
           product_id: t.Number(),
         }),
@@ -98,7 +107,10 @@ const cartPlugin = new Elysia().group("/cart", (group) =>
         };
       },
       {
-        detail: { tags: ["Cart"] },
+        detail: { 
+          tags: ["Cart"] ,
+          security: [{ JwtAuth: [] }],
+        },
       }
     )
     .delete(
@@ -116,7 +128,10 @@ const cartPlugin = new Elysia().group("/cart", (group) =>
         };
       },
       {
-        detail: { tags: ["Cart"] },
+        detail: { 
+          tags: ["Cart"] ,
+          security: [{ JwtAuth: [] }],
+        },
       }
     )
     .get(
