@@ -89,3 +89,62 @@ export const createOrder = async (
 
   return order;
 };
+// Hàm lấy đơn hàng theo status
+export const getOrdersByStatus = async (status: string) => {
+  const orderRepository = AppDataSource.getRepository(Order);
+  const orderProductRepository = AppDataSource.getRepository(OrderProduct);
+  
+  // Tìm kiếm đơn hàng theo status
+  const orders = await orderRepository.find({
+    where: { status },
+    relations: ["user"], // Nếu cần thông tin user kèm theo đơn hàng
+  });
+
+  // Lấy thông tin order theo status
+  const ordersWithProducts = await Promise.all(orders.map(async (order) => {
+    const orderProducts = await orderProductRepository.find({
+      where: { orderId: order.id },
+    });
+
+    return {
+      ...order,
+      orderProducts,
+    };
+  }));
+
+  return ordersWithProducts;
+};
+// Lấy thông tin đơn hàng theo id mà không cần OrderProduct
+export const getOrderById = async (orderId: number) => {
+  const orderRepository = AppDataSource.getRepository(Order);
+  
+  // Tìm kiếm đơn hàng theo orderId
+  const order = await orderRepository.findOne({
+    where: { id: orderId },
+    relations: ["user"], // Nếu cần thông tin user kèm theo đơn hàng
+  });
+
+  if (!order) {
+    throw new Error("Order not found");
+  }
+
+  // Trả về nguyên bản đối tượng order mà không cần liệt kê thông tin
+  return order;
+};
+
+// Hàm lấy thông tin OrderProduct theo orderId
+export const getOrderProductsByOrderId = async (orderId: number) => {
+  const orderProductRepository = AppDataSource.getRepository(OrderProduct);
+
+  // Tìm kiếm các sản phẩm của đơn hàng theo orderId
+  const orderProducts = await orderProductRepository.find({
+    where: { orderId: orderId },
+    relations: ["product"], // Quan hệ với sản phẩm nếu cần lấy thông tin chi tiết sản phẩm
+  });
+
+  if (!orderProducts) {
+    throw new Error('No products found for this order');
+  }
+
+  return orderProducts;
+};

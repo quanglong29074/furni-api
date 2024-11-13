@@ -66,5 +66,4 @@ export class Order {
   @Column({ type: 'varchar', length: 255 })
   secure_token!: string;
 
- 
 }

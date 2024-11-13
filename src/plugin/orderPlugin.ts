@@ -67,6 +67,102 @@ const orderPlugin = new Elysia().group("/order", (group) =>
         }),
       }
     )
+    .get(
+      "/getOrdersByStatus",
+      async ({ query, headers }) => {
+        const token = headers.authorization;
+        const loggedUser = isAuthenticated(token);
+
+        if (!loggedUser) {
+          throw new Error("Authentication failed");
+        }
+
+        const { status } = query;
+
+        try {
+          const orders = await orderService.getOrdersByStatus(status);
+          return { status: 200, data: orders };
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            return { status: 400, message: error.message };
+          }
+          return { status: 400, message: 'An unknown error occurred' };
+        }
+      },
+      {
+        detail: {
+          tags: ["Order"],
+          security: [{ JwtAuth: [] }],
+        },
+        query: t.Object({
+          status: t.String(),
+        }),
+      }
+    )
+    .get(
+      "/getOrderById",
+      async ({ query, headers }) => {
+        const token = headers.authorization;
+        const loggedUser = isAuthenticated(token);
+
+        if (!loggedUser) {
+          throw new Error("Authentication failed");
+        }
+
+        const { orderId } = query;
+
+        try {
+          const order = await orderService.getOrderById(orderId);
+          return { status: 200, data: order };
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            return { status: 400, message: error.message };
+          }
+          return { status: 400, message: 'An unknown error occurred' };
+        }
+      },
+      {
+        detail: {
+          tags: ["Order"],
+          security: [{ JwtAuth: [] }],
+        },
+        query: t.Object({
+          orderId: t.Number(), // Thêm tham số orderId
+        }),
+      }
+    )
+    .get(
+      "/getOrderProductsByOrderId",
+      async ({ query, headers }) => {
+        const token = headers.authorization;
+        const loggedUser = isAuthenticated(token);
+
+        if (!loggedUser) {
+          throw new Error("Authentication failed");
+        }
+
+        const { orderId } = query;
+
+        try {
+          const orderProducts = await orderService.getOrderProductsByOrderId(orderId);
+          return { status: 200, data: orderProducts };
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            return { status: 400, message: error.message };
+          }
+          return { status: 400, message: 'An unknown error occurred' };
+        }
+      },
+      {
+        detail: {
+          tags: ["Order"],
+          security: [{ JwtAuth: [] }],
+        },
+        query: t.Object({
+          orderId: t.Number(),
+        }),
+      }
+    )
 );
 
 export default orderPlugin;
