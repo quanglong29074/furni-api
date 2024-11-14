@@ -148,3 +148,26 @@ export const getOrderProductsByOrderId = async (orderId: number) => {
 
   return orderProducts;
 };
+// Update order status
+export const updateOrderStatus = async (orderId: number, newStatus: string, cancelReason?: string) => {
+  const orderRepository = AppDataSource.getRepository(Order);
+
+  // Find the order by ID
+  const order = await orderRepository.findOne({ where: { id: orderId } });
+  if (!order) {
+    throw new Error("Order not found");
+  }
+
+  // Update status and cancel reason if provided
+  order.status = newStatus;
+  if (newStatus === "cancel" && cancelReason) {
+    order.cancel_reason = cancelReason;
+  } else if (newStatus !== "cancel") {
+    order.cancel_reason = null; // Clear cancel reason if not canceled
+  }
+
+  // Save the updated order
+  await orderRepository.save(order);
+
+  return order;
+};

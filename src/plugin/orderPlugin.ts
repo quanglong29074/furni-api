@@ -163,6 +163,40 @@ const orderPlugin = new Elysia().group("/order", (group) =>
         }),
       }
     )
+    .patch(
+      "/updateStatus",
+      async ({ headers, body }) => {
+        const token = headers.authorization;
+        const loggedUser = isAuthenticated(token);
+
+        if (!loggedUser) {
+          throw new Error("Authentication failed");
+        }
+
+        const { orderId, newStatus, cancelReason } = body;
+
+        try {
+          const updatedOrder = await orderService.updateOrderStatus(orderId, newStatus, cancelReason);
+          return { status: 200, data: updatedOrder };
+        } catch (error: unknown) {
+          if (error instanceof Error) {
+            return { status: 400, message: error.message };
+          }
+          return { status: 400, message: 'An unknown error occurred' };
+        }
+      },
+      {
+        detail: {
+          tags: ["Order"],
+          security: [{ JwtAuth: [] }],
+        },
+        body: t.Object({
+          orderId: t.Number(),
+          newStatus: t.String(),
+          cancelReason: t.Optional(t.String()), // Optional, only needed for "cancel" status
+        }),
+      }
+    )
 );
 
 export default orderPlugin;
