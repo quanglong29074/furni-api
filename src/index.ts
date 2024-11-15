@@ -10,6 +10,7 @@ import productPlugin from './plugin/productPlugin';
 import cartPlugin from './plugin/cartPlugin';
 import orderPlugin from './plugin/orderPlugin';
 import favoritePlugin from './plugin/favoritePlugin';
+import reviewPlugin from './plugin/reviewPlugin';
 // Tạo kết nối tới MySQL trên XAMPP
 await AppDataSource.initialize()
     .then(() => {
@@ -53,6 +54,7 @@ const app = new Elysia()
       .use(cartPlugin)
       .use(orderPlugin)
       .use(favoritePlugin)
+      .use(reviewPlugin)
 
   //add more plugins here
 )
