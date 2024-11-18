@@ -11,6 +11,9 @@ import { Order } from './entity/order';
 import { OrderProduct } from './entity/order_product';
 import { Favorite } from './entity/favorite';
 import { Review } from './entity/review';
+import { Notification } from './entity/notification';
+import { OrderReturn } from './entity/order_return';
+import { ReturnImage } from './entity/return_images';
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -19,5 +22,21 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: 'root', 
   database: 'furni_shop', 
-  entities: [User, Role, Brand, Material, Size, Category, Product, Cart, Order, OrderProduct,Favorite,Review], 
+  entities: [
+     User,
+     Role, 
+     Brand, 
+     Material, 
+     Size, 
+     Category, 
+     Product, 
+     Cart, 
+     Order, 
+     OrderProduct,
+     Favorite,
+     Review,
+     Notification,
+     OrderReturn,
+     ReturnImage,
+    ], 
 });

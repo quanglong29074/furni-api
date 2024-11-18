@@ -95,3 +95,38 @@ export const changePassword = async ( oldPassword:string, newPassword:string, co
 
   return { message: "Password changed successfully" }; // Trả về thông báo thành công
 };
+// lấy dữ liệu user 
+export const getUserProfile = async (userId: number) => {
+  const user = await AppDataSource.getRepository(User).findOne({ where: { id: userId } });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Loại bỏ thông tin nhạy cảm như mật khẩu trước khi trả về
+  const { password, ...userWithoutPassword } = user;
+  return userWithoutPassword;
+};
+// update user
+export const updateUserProfile = async (userId: number, data: Partial<User>) => {
+  const userRepo = AppDataSource.getRepository(User);
+  const user = await userRepo.findOne({ where: { id: userId } });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Kiểm tra và cập nhật từng trường nếu có trong dữ liệu gửi từ client
+  Object.keys(data).forEach((key) => {
+    const value = data[key as keyof Partial<User>];
+    if (value !== undefined) {
+      (user as any)[key] = value; // Cập nhật giá trị mới
+    }
+  });
+
+  // Lưu thay đổi vào cơ sở dữ liệu
+  await userRepo.save(user);
+
+  return { message: "Profile updated successfully", user };
+};
+

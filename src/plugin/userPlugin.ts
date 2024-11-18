@@ -63,6 +63,45 @@ const {oldPassword, newPassword, confirmNewPassword} = body
           confirmNewPassword: t.String()
         })
       })
+      .get("/profile", async ({ headers }) => {
+        const token = headers.authorization;
+        const loggedUser = isAuthenticated(token);
+      
+        if (!loggedUser) {
+          throw new Error('Authentication failed');
+        }
+      
+        return await userService.getUserProfile(loggedUser.id);
+      }, {
+        detail: {
+          tags: ['User'],
+          security: [{ JwtAuth: [] }],
+        },
+      })
+      .put("/profile", async ({ body, headers }) => {
+        const token = headers.authorization;
+        const loggedUser = isAuthenticated(token);
+      
+        if (!loggedUser) {
+          throw new Error('Authentication failed');
+        }
+      
+        return await userService.updateUserProfile(loggedUser.id, body);
+      }, {
+        detail: {
+          tags: ['User'],
+          security: [{ JwtAuth: [] }],
+        },
+        body: t.Object({
+          full_name: t.Optional(t.String()),
+          email: t.Optional(t.String()),
+          phone_number: t.Optional(t.String()),
+          address: t.Optional(t.String()),
+          thumbnail: t.Optional(t.String())
+        })
+      })
+      
+            
   );
 
 export default userPlugin;
