@@ -4,17 +4,6 @@ import * as productService from "../service/productService";
 const productPlugin = new Elysia().group("/product", (group) =>
   group
     .get(
-      "/",
-      async () => {
-        return await productService.getAllProduct();
-      },
-      {
-        detail: {
-          tags: ["Product"],
-        },
-      }
-    )
-    .get(
       "/category/:id",
       async ({ params }: { params: { id: string } }) => {
         const categoryId = parseInt(params.id);

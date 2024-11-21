@@ -1,24 +1,6 @@
 import { Product } from "../entity/product";
 import { AppDataSource } from '../data-source';
 
-export const getAllProduct = async () => {
-    const products = await AppDataSource.getRepository(Product)
-      .createQueryBuilder("product")
-      .leftJoinAndSelect("product.category", "category")
-      .leftJoinAndSelect("product.brand", "brand")
-      .leftJoinAndSelect("product.material", "material")
-      .leftJoinAndSelect("product.size", "size")
-      .select([
-        "product",
-        "category.category_name",  // Lấy tên danh mục
-        "brand.brand_name",        // Lấy tên thương hiệu
-        "material.material_name",  // Lấy tên chất liệu
-        "size.size_name"           // Lấy kích thước
-      ])
-      .getMany();
-
-    return products;
-}
 export const getProductsByCategoryId = async (categoryId: number) => {
   const products = await AppDataSource.getRepository(Product)
     .createQueryBuilder("product")
@@ -27,6 +9,7 @@ export const getProductsByCategoryId = async (categoryId: number) => {
     .leftJoinAndSelect("product.material", "material")
     .leftJoinAndSelect("product.size", "size")
     .where("category.id = :categoryId", { categoryId })
+    .andWhere("product.deleted_at IS NULL") // Điều kiện chỉ lấy sản phẩm chưa bị xóa
     .select([
       "product",
       "category.category_name",
@@ -36,8 +19,9 @@ export const getProductsByCategoryId = async (categoryId: number) => {
     ])
     .getMany();
 
-  return products.length > 0 ? products : [];  // Trả về một danh sách rỗng nếu không có sản phẩm
-}
+  return products.length > 0 ? products : []; // Trả về danh sách rỗng nếu không có sản phẩm
+};
+
 
 
 
@@ -126,7 +110,9 @@ export const searchProductsByName = async (name: string) => {
       "size.size_name",
     ])
     .where("product.product_name LIKE :name", { name: `%${name}%` })
+    .andWhere("product.deleted_at IS NULL") // Thêm điều kiện kiểm tra deleted_at là NULL
     .getMany();
 
   return products;
 };
+

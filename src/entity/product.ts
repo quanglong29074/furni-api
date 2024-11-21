@@ -54,4 +54,7 @@ export class Product {
 
   @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   length!: number; 
+
+  @Column({ type: 'datetime', precision: 6, nullable: true })
+  deleted_at!: Date | null; 
 }
